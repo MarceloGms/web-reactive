@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS media_users;
+DROP TABLE IF EXISTS media;
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE media (
 	identifier	 BIGSERIAL,
 	title		 VARCHAR(512),
