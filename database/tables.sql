@@ -8,16 +8,16 @@ CREATE TABLE media (
     identifier      BIGSERIAL PRIMARY KEY,
     title           VARCHAR(512) NOT NULL,
     release_date    DATE,
-    average_rating  FLOAT(8),
-    type            BOOLEAN
+    average_rating  FLOAT(8) CHECK (0 <= average_rating AND average_rating <= 10),
+    type            BOOLEAN NOT NULL
 );
 
 -- Create users table
 CREATE TABLE users (
     identifier BIGSERIAL PRIMARY KEY,
     name       VARCHAR(512) NOT NULL,
-    age        SMALLINT CHECK (age >= 0),  -- Ensure age is non-negative
-    gender     BOOLEAN
+    age        SMALLINT CHECK (age >= 0),
+    gender     VARCHAR(512) CHECK (gender IN ('M', 'F'))
 );
 
 -- Create media_users table to establish a many-to-many relationship

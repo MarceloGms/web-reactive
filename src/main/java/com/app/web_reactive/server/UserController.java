@@ -1,33 +1,47 @@
 package com.app.web_reactive.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.web.bind.annotation.*;
+
+import com.app.web_reactive.data.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Map;
+import reactor.core.publisher.Mono;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/user")
 public class UserController {
 
-    /* private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private DatabaseClient databaseClient;
 
-    @PostMapping
-    public ResponseEntity<Map<String, Object>> createUser(@RequestBody Map<String, Object> user) {
-        logger.info("Creating new user");
-        String sql = "INSERT INTO users (name, age, gender) VALUES (?, ?, ?) RETURNING id";
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, user.get("name"), user.get("email"));
-        logger.info("User created with ID: {}", result.get(0).get("id"));
-        return ResponseEntity.ok(result.get(0));
+    @PostMapping("/create")
+    public Mono<ResponseEntity<User>> createUser(@RequestBody User user) {
+        logger.info("Creating user: {}", user.getName());
+        
+        return databaseClient.sql("INSERT INTO users (name, age, gender) VALUES (:name, :age, :gender) RETURNING identifier")
+            .bind("name", user.getName())
+            .bind("age", user.getAge())
+            .bind("gender", user.getGender())
+            .map(row -> row.get("identifier", Long.class))
+            .one()
+            .map(id -> {
+                user.setId(id);
+                logger.info("User created successfully with ID: {}", id);
+                return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            })
+            .onErrorResume(e -> {
+                logger.error("Error creating user: {}", e.getMessage());
+                return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
+            });
     }
-
+    /*
     @GetMapping
     public List<Map<String, Object>> getAllUsers() {
         logger.info("Fetching all users");
