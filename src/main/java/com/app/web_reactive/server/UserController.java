@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    /* private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -84,5 +84,5 @@ public class UserController {
         }
         logger.info("User deleted successfully with ID: {}", id);
         return ResponseEntity.noContent().build();
-    }
+    } */
 }
