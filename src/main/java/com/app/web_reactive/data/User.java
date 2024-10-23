@@ -9,8 +9,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Table("users")
 public class User {
-   long id;
-   String name;
-   int age;
-   boolean gender;
+    long id;
+    String name;
+    int age;
+    boolean gender;
 }
