@@ -3,6 +3,7 @@ package com.app.web_reactive.data;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.AllArgsConstructor;
@@ -10,13 +11,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor // Adicione isso para o construtor sem argumentos
+@NoArgsConstructor
 @AllArgsConstructor
 @Table("media")
 public class Media implements Serializable {
-   private Long id; // Alterado para Long
+   @Id
+   private Long identifier;
    private String title;
-   private LocalDate release_date; // Alterado para LocalDate
+   private LocalDate release_date;
    private float average_rating;
    private boolean type;
 }
