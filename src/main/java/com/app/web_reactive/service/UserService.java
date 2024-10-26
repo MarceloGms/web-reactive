@@ -43,7 +43,7 @@ public class UserService {
     public Mono<User> getUserById(Long id) {
         return userRepository.findById(id)
             .switchIfEmpty(Mono.defer(() -> {
-                logger.warn("User not found with id: {}", id);
+                logger.warn("User not found with id: {}", id); //! not working
                 return Mono.error(new ResourceNotFoundException("User not found with id " + id));
             }))
             .doOnNext(user -> logger.info("Fetched user: {}", user))

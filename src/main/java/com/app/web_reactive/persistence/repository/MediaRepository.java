@@ -10,6 +10,4 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface MediaRepository extends ReactiveCrudRepository<Media, Long> {
-    // Custom query method to find media by title
-    Flux<Media> findByTitle(String title);
 }
