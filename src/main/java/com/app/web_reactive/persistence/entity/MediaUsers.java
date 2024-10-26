@@ -1,4 +1,4 @@
-package com.app.web_reactive.data;
+package com.app.web_reactive.persistence.entity;
 
 import org.springframework.data.relational.core.mapping.Table;
 

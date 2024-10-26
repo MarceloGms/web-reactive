@@ -1,8 +1,9 @@
 package com.app.web_reactive.client;
 
-import com.app.web_reactive.data.User;
-
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.app.web_reactive.persistence.entity.User;
+
 import java.io.IOException;
 
 public class Client {

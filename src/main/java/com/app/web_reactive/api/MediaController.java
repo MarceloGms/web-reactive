@@ -1,5 +1,5 @@
-// MediaController.java
-package com.app.web_reactive.server;
+/* // MediaController.java
+package com.app.web_reactive.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import com.app.web_reactive.data.Media;
-import com.app.web_reactive.repository.MediaRepository;
+import com.app.web_reactive.persistence.MediaRepository;
+import com.app.web_reactive.persistence.entity.Media;
 
 @RestController
 @RequestMapping("/media")
@@ -100,4 +100,4 @@ public class MediaController {
                         .doOnSuccess(aVoid -> logger.info("Media deleted successfully"))
                         .doOnError(e -> logger.error("Error deleting media: {}", e.getMessage()));
       }
-}
+} */

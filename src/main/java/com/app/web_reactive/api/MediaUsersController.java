@@ -1,4 +1,4 @@
-package com.app.web_reactive.server;
+package com.app.web_reactive.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import com.app.web_reactive.data.Media;
-import com.app.web_reactive.data.MediaUsers;
-import com.app.web_reactive.repository.MediaUsersRepository;
+import com.app.web_reactive.persistence.entity.Media;
+import com.app.web_reactive.persistence.entity.MediaUsers;
+import com.app.web_reactive.persistence.repository.MediaUsersRepository;
 
 @RestController
 @RequestMapping("/relationship")
