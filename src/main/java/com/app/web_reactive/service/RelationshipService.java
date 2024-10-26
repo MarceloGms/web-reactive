@@ -34,6 +34,7 @@ public class RelationshipService {
     }
 
     public Mono<Void> disassociateMediaFromUser(long mediaIdentifier, long usersIdentifier) {
+        // TODO: Talvez estas queries deviam estar no repository e nao aqui
         String sql = """
             DELETE FROM media_users
             WHERE media_identifier = :mediaId AND users_identifier = :userId
