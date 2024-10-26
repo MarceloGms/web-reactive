@@ -23,6 +23,7 @@ public class Media implements Serializable {
    @Id
    private Long identifier;
 
+   // TODO: Validation not working
    @NotBlank(message = "Title is mandatory")
    @Size(max = 512, message = "Title must be less than or equal to 512 characters")
    private String title;

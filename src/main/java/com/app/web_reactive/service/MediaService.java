@@ -74,6 +74,7 @@ public class MediaService {
             });
     }
 
+    // TODO: Delete specific media/user (if they are not connected to another media/user).
     public Mono<Void> deleteMedia(Long id) {
         return mediaRepository.findById(id)
             .switchIfEmpty(Mono.defer(() -> {

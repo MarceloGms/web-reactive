@@ -54,6 +54,9 @@ public class RelationshipService {
             .then();
     }
 
+    /* TODO: Read  relationship.  This  service  can  only  return  the  identifiers  of  some 
+        media/user, not the entire media data, i.e., students should not create a service 
+        that immediately provides, say, a user with all data of all the user’s media. */
     public Flux<Media> getMediaByUser(long userId) {
         String sql = """
             SELECT m.* FROM media m

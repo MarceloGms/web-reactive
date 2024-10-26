@@ -19,6 +19,7 @@ public class User {
    @Id
    private long identifier;
 
+   // TODO: Validation not working
    @NotBlank(message = "Name is mandatory")
    @Size(max = 512, message = "Name must be less than or equal to 512 characters")
    private String name;
