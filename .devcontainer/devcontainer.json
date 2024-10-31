@@ -15,5 +15,6 @@
 				"postman.postman-for-vscode"
 			]
 		}
-	}
+	},
+	"forwardPorts": [8080]
 }

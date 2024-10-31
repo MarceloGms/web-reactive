@@ -18,8 +18,9 @@ services:
     command: tail -f /dev/null
     networks:
       - server-network
+    ports:
+      - 8080:8080
     volumes:
       - ..:/web-reactive
-
 networks:
   server-network:
