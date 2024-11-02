@@ -16,5 +16,6 @@
 				"aaron-bond.better-comments"
 			]
 		}
-	}
+	},
+	"forwardPorts": [8080]
 }
