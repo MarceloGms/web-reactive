@@ -22,6 +22,7 @@ public class RelationshipController {
         this.relationshipService = relationshipService;
     }
 
+    // TODO: use request body instead of request params
     @PostMapping("/associate")
     public Mono<Void> associateMediaWithUser(@RequestParam long media_identifier,
                                              @RequestParam long users_identifier) {
@@ -36,8 +37,8 @@ public class RelationshipController {
         return relationshipService.disassociateMediaFromUser(media_identifier, users_identifier);
     }
 
-    @GetMapping("/user/{userId}/media")
-    public Flux<Media> getMediaByUser(@PathVariable long userId) {
+    @GetMapping("/{userId}")
+    public Flux<Long> getMediaByUser(@PathVariable long userId) {
         logger.info("Fetching media for user {}", userId);
         return relationshipService.getMediaByUser(userId);
     }

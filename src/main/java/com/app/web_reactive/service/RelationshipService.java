@@ -1,6 +1,5 @@
 package com.app.web_reactive.service;
 
-import com.app.web_reactive.persistence.entity.Media;
 import com.app.web_reactive.persistence.entity.MediaUsers;
 import com.app.web_reactive.persistence.repository.RelationshipRepository;
 import reactor.core.publisher.Flux;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.LocalDate;
 
 @Service
 public class RelationshipService {
@@ -55,25 +52,20 @@ public class RelationshipService {
             .then();
     }
 
-    /* TODO: Read  relationship.  This  service  can  only  return  the  identifiers  of  some 
-        media/user, not the entire media data, i.e., students should not create a service 
-        that immediately provides, say, a user with all data of all the user’s media. */
-    public Flux<Media> getMediaByUser(long userId) {
+    // TODO: Read  relationship.  This  service  can  only  return  the  identifiers  of  some 
+    /* media/user, not the entire media data, i.e., students should not create a service 
+    that immediately provides, say, a user with all data of all the user’s media. */
+    public Flux<Long> getMediaByUser(long userId) {
         String sql = """
-            SELECT m.* FROM media m
+            SELECT m.identifier FROM media m
             JOIN media_users mu ON m.identifier = mu.media_identifier
             WHERE mu.users_identifier = :userId
         """;
-
+    
         return databaseClient.sql(sql)
             .bind("userId", userId)
-            .map((row, metadata) -> new Media(
-                row.get("identifier", Long.class),
-                row.get("title", String.class),
-                row.get("release_date", LocalDate.class),
-                row.get("average_rating", Float.class),
-                row.get("type", Boolean.class)))
+            .map((row, metadata) -> row.get("identifier", Long.class))
             .all()
-            .doOnNext(media -> logger.info("Retrieved media: {}", media));
+            .doOnNext(id -> logger.info("Retrieved media identifier: {}", id));
     }
 }

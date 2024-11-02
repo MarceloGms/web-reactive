@@ -1,10 +1,5 @@
--- Drop existing tables if they exist
-DROP TABLE IF EXISTS media_users CASCADE;
-DROP TABLE IF EXISTS media CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-
 -- Create media table
-CREATE TABLE media (
+CREATE TABLE IF NOT EXISTS media (
     identifier      BIGSERIAL PRIMARY KEY,
     title           VARCHAR(512) NOT NULL,
     release_date    DATE,
@@ -13,7 +8,7 @@ CREATE TABLE media (
 );
 
 -- Create users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     identifier BIGSERIAL PRIMARY KEY,
     name       VARCHAR(512) NOT NULL,
     age        SMALLINT CHECK (age >= 0),
@@ -21,7 +16,7 @@ CREATE TABLE users (
 );
 
 -- Create media_users table to establish a many-to-many relationship
-CREATE TABLE media_users (
+CREATE TABLE IF NOT EXISTS media_users (
     media_identifier BIGINT NOT NULL,
     users_identifier BIGINT NOT NULL,
     PRIMARY KEY (media_identifier, users_identifier),
