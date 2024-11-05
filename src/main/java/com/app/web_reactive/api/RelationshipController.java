@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import com.app.web_reactive.persistence.entity.Media;
+import com.app.web_reactive.persistence.entity.MediaUsers;
 import com.app.web_reactive.service.RelationshipService;
 
 @RestController
@@ -25,14 +26,14 @@ public class RelationshipController {
     // TODO: use request body instead of request params
     @PostMapping("/associate")
     public Mono<Void> associateMediaWithUser(@RequestParam long media_identifier,
-                                             @RequestParam long users_identifier) {
+            @RequestParam long users_identifier) {
         logger.info("Associating media {} with user {}", media_identifier, users_identifier);
         return relationshipService.associateMediaWithUser(media_identifier, users_identifier);
     }
 
     @DeleteMapping("/disassociate")
     public Mono<Void> disassociateMediaFromUser(@RequestParam long media_identifier,
-                                                @RequestParam long users_identifier) {
+            @RequestParam long users_identifier) {
         logger.info("Disassociating media {} from user {}", media_identifier, users_identifier);
         return relationshipService.disassociateMediaFromUser(media_identifier, users_identifier);
     }
@@ -42,4 +43,21 @@ public class RelationshipController {
         logger.info("Fetching media for user {}", userId);
         return relationshipService.getMediaByUser(userId);
     }
+
+    @GetMapping("/getMediaUsers")
+    public Flux<Long> getMediaUsers() {
+        logger.info("Fetching media users");
+        return relationshipService.getMediaUsers()
+                .flatMapMany(Flux::fromIterable)
+                .flatMap(Flux::fromIterable);
+    }
+
+    /*
+     * public Flux<MediaUsers> getAllMediaUsers() {
+     * return mediaUsersRepository.findAll()
+     * .doOnComplete(() -> logger.info("Fetched all media users"))
+     * .doOnError(error -> logger.error("Error fetching all media users", error));
+     * 
+     * }
+     */
 }
