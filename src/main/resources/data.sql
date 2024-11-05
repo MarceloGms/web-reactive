@@ -1,15 +1,24 @@
 -- Insert initial data into the media table
 INSERT INTO media (title, release_date, average_rating, type) VALUES
-('Media Title 1', '2023-01-01', 8.5, true),
-('Media Title 2', '2023-02-01', 7.0, false),
-('Media Title 3', '2023-03-01', 9.0, true),
-('Media Title 4', '2023-04-01', 6.5, false),
-('Media Title 5', '2023-05-01', 8.0, true),
-('Media Title 6', '2023-06-01', 7.5, false),
-('Media Title 7', '2023-07-01', 9.5, true),
-('Media Title 8', '2023-08-01', 6.0, false),
-('Media Title 9', '2023-09-01', 8.2, true),
-('Media Title 10', '2023-10-01', 7.8, false);
+('The Shawshank Redemption', '1994-09-23', 9.3, true),
+('The Godfather', '1972-03-24', 9.2, false),
+('The Dark Knight', '2008-07-18', 9.0, true),
+('Pulp Fiction', '1994-10-14', 8.9, false),
+('The Lord of the Rings: The Return of the King', '2003-12-17', 8.9, true),
+('Forrest Gump', '1994-07-06', 8.8, false),
+('Inception', '2010-07-16', 8.8, true),
+('Fight Club', '1999-10-15', 8.8, false),
+('The Matrix', '1999-03-31', 8.7, true),
+('Goodfellas', '1990-09-19', 8.7, false),
+('Back to the Future', '1985-07-03', 8.5, true),
+('The Breakfast Club', '1985-02-15', 7.9, false),
+('Die Hard', '1988-07-15', 8.2, true),
+('E.T. the Extra-Terrestrial', '1982-06-11', 7.8, false),
+('Ghostbusters', '1984-06-08', 7.8, true),
+('The Terminator', '1984-10-26', 8.0, false),
+('Blade Runner', '1982-06-25', 8.1, true),
+('The Shining', '1980-05-23', 8.4, false),
+('Indiana Jones and the Last Crusade', '1989-05-24', 8.2, true);
 
 -- Insert initial data into the users table
 INSERT INTO users (name, age, gender) VALUES
@@ -22,7 +31,12 @@ INSERT INTO users (name, age, gender) VALUES
 ('Eve Adams', 31, 'F'),
 ('Frank Castle', 40, 'M'),
 ('Grace Hopper', 29, 'F'),
-('Hank Pym', 33, 'M');
+('Hank Pym', 33, 'M'),
+('Sarah Connor', 36, 'F'),
+('Marty McFly', 17, 'M'),
+('Ellen Ripley', 32, 'F'),
+('Peter Venkman', 38, 'M'),
+('Indiana Jones', 45, 'M');
 
 -- Insert initial data into the media_users table
 INSERT INTO media_users (media_identifier, users_identifier) VALUES
@@ -45,4 +59,14 @@ INSERT INTO media_users (media_identifier, users_identifier) VALUES
 (9, 6),
 (9, 8),
 (10, 9),
-(10, 10);
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 11),
+(17, 12),
+(18, 13),
+(19, 14),
+(20, 15);
