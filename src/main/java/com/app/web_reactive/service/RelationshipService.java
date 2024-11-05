@@ -22,17 +22,19 @@ public class RelationshipService {
     private static final Logger logger = LoggerFactory.getLogger(RelationshipService.class);
 
     @Autowired
-    private RelationshipRepository mediaUsersRepository;
+    private RelationshipRepository relationshipRepository;
 
-    public Mono<Void> associateMediaWithUser(long mediaIdentifier, long usersIdentifier) {
-        MediaUsers mediaUsers = new MediaUsers(mediaIdentifier, usersIdentifier);
-        return mediaUsersRepository.save(mediaUsers)
-                .doOnSuccess(c -> logger.info("Associated media {} with user {}", mediaIdentifier, usersIdentifier))
+    @Autowired
+    private MediaRepository mediaRepository;
+
+    public Mono<Void> associateMediaWithUser(MediaUsers mediaUsers) {
+        return relationshipRepository.save(mediaUsers)
+                .doOnSuccess(c -> logger.info("Associated media {} with user {}", mediaUsers.getMediaIdentifier(), mediaUsers.getUsersIdentifier()))
                 .then();
     }
 
     public Mono<Void> disassociateMediaFromUser(long mediaIdentifier, long usersIdentifier) {
-        return mediaUsersRepository.deleteByMediaIdentifierAndUsersIdentifier(mediaIdentifier, usersIdentifier)
+        return relationshipRepository.deleteByMediaIdentifierAndUsersIdentifier(mediaIdentifier, usersIdentifier)
                 .doOnSuccess(rows -> {
                     if (rows > 0) {
                         logger.info("Disassociated media {} from user {}", mediaIdentifier, usersIdentifier);
@@ -43,17 +45,8 @@ public class RelationshipService {
                 .then();
     }
 
-    /*
-     * media/user, not the entire media data, i.e., students should not create a
-     * service
-     * that immediately provides, say, a user with all data of all the user’s media.
-     */
-    @Autowired
-    private RelationshipRepository relationshipRepository;
 
-    @Autowired
-    private MediaRepository mediaRepository;
-
+    // TODO: este metodos podem estar mal
     public Flux<Long> getMediaByUser(long userId) {
         return relationshipRepository.findByUsersIdentifier(userId) // Fetch MediaUsers by userId
                 .flatMap(mediaUser -> mediaRepository.findById(mediaUser.getMediaIdentifier())) // Fetch the media by //
@@ -72,7 +65,7 @@ public class RelationshipService {
      * ]
      */
     public Mono<List<List<Long>>> getMediaUsers() {
-        return mediaUsersRepository.findAll() // Fetch all MediaUsers entries reactively
+        return relationshipRepository.findAll() // Fetch all MediaUsers entries reactively
                 .map(mediaUser -> {
                     Long mediaId = mediaUser.getMediaIdentifier();
                     Long userId = mediaUser.getUsersIdentifier();

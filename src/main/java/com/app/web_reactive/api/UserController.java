@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -22,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public Mono<User> createUser(@Valid @RequestBody User user) {
+    public Mono<User> createUser(@RequestBody User user) {
         logger.info("Creating user: {}", user);
         return userService.createUser(user);
     }
@@ -40,7 +38,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public Mono<User> updateUser(@PathVariable Long id, @Valid @RequestBody User user) {
+    public Mono<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         logger.info("Updating user with id: {}", id);
         return userService.updateUser(id, user);
     }
