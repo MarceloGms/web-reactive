@@ -51,13 +51,4 @@ public class RelationshipController {
                 .flatMapMany(Flux::fromIterable)
                 .flatMap(Flux::fromIterable);
     }
-
-    /*
-     * public Flux<MediaUsers> getAllMediaUsers() {
-     * return mediaUsersRepository.findAll()
-     * .doOnComplete(() -> logger.info("Fetched all media users"))
-     * .doOnError(error -> logger.error("Error fetching all media users", error));
-     * 
-     * }
-     */
 }
