@@ -2,12 +2,13 @@ package com.app.web_reactive.service;
 
 import com.app.web_reactive.persistence.entity.Media;
 import com.app.web_reactive.persistence.repository.MediaRepository;
+import com.app.web_reactive.persistence.repository.RelationshipRepository;
+import com.app.web_reactive.exception.ConflictException;
 import com.app.web_reactive.exception.ResourceNotFoundException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,10 @@ public class MediaService {
     @Autowired
     private MediaRepository mediaRepository;
 
-    public Mono<Media> createMedia(Media media) {
+    @Autowired
+    private RelationshipRepository relationshipRepository;
 
+    public Mono<Media> createMedia(Media media) {
         return mediaRepository.save(media)
                 .doOnSuccess(createdMedia -> logger.info("Created media: {}", createdMedia))
                 .doOnError(error -> {
@@ -77,9 +80,6 @@ public class MediaService {
                 });
     }
 
-    @Autowired
-    private DatabaseClient databaseClient;
-
     public Mono<Void> deleteMedia(Long id) {
         return mediaRepository.findById(id)
                 .switchIfEmpty(Mono.defer(() -> {
@@ -87,27 +87,18 @@ public class MediaService {
                     return Mono.error(new ResourceNotFoundException("Media not found with id " + id));
                 }))
                 .flatMap(media -> {
-                    // Check for associations in media_users table
-                    String checkAssociationsQuery = """
-                                SELECT COUNT(*) FROM media_users WHERE media_identifier = :mediaId
-                            """;
-                    return databaseClient.sql(checkAssociationsQuery)
-                            .bind("mediaId", id)
-                            .map(row -> row.get(0, Long.class))
-                            .one()
+                    return relationshipRepository.findByMediaIdentifier(id)
+                            .count()
                             .flatMap(count -> {
                                 if (count == 0) {
-                                    // No associations, proceed with delete
                                     return mediaRepository.deleteById(id)
                                             .doOnSuccess(unused -> logger.info("Deleted media with id: {}", id));
                                 } else {
-                                    logger.warn("Cannot delete media with id {} because it is associated with users",
-                                            id);
-                                    return Mono.error(new RuntimeException("Cannot delete media, associations found"));
+                                    logger.warn("Cannot delete media with id {} because it is associated with users", id);
+                                    return Mono.error(new ConflictException("Cannot delete media, associations found"));
                                 }
                             });
                 })
                 .doOnError(error -> logger.error("Error deleting media with id: {}", id, error));
     }
-
 }

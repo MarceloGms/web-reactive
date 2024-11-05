@@ -1,6 +1,7 @@
 package com.app.web_reactive.service;
 
 import com.app.web_reactive.persistence.entity.User;
+import com.app.web_reactive.persistence.repository.RelationshipRepository;
 import com.app.web_reactive.persistence.repository.UserRepository;
 import com.app.web_reactive.exception.ConflictException;
 import com.app.web_reactive.exception.ResourceNotFoundException;
@@ -10,7 +11,6 @@ import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.r2dbc.core.DatabaseClient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +22,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
-    //! ta mal
-    private DatabaseClient databaseClient;
+    private RelationshipRepository relationshipRepository;
 
     public Mono<User> createUser(User user) {
         return userRepository.save(user)
@@ -79,6 +79,7 @@ public class UserService {
                 });
     }
 
+    // TODO: isto quando tem uma relationship da throw de uma exception, perguntar ao stor se é suposto
     public Mono<Void> deleteUser(Long id) {
         return userRepository.findById(id)
                 .switchIfEmpty(Mono.defer(() -> {
@@ -86,26 +87,19 @@ public class UserService {
                     return Mono.error(new ResourceNotFoundException("User not found with id " + id));
                 }))
                 .flatMap(user -> {
-                    // Check for associations in media_users table
-                    String checkAssociationsQuery = """
-                                SELECT COUNT(*) FROM media_users WHERE users_identifier = :userId
-                            """;
-                    return databaseClient.sql(checkAssociationsQuery)
-                            .bind("userId", id)
-                            .map(row -> row.get(0, Long.class))
-                            .one()
+                    return relationshipRepository.findByUsersIdentifier(id)
+                            .count()
                             .flatMap(count -> {
                                 if (count == 0) {
-                                    // No associations, proceed with delete
                                     return userRepository.deleteById(id)
                                             .doOnSuccess(unused -> logger.info("Deleted user with id: {}", id));
                                 } else {
-                                    logger.warn("Cannot delete user with id {} because they are associated with media",
-                                            id);
+                                    logger.warn("Cannot delete user with id {} because they are associated with media", id);
                                     return Mono.error(new ConflictException("Cannot delete user, associations found"));
                                 }
                             });
                 })
                 .doOnError(error -> logger.error("Error deleting user with id: {}", id, error));
     }
+    
 }

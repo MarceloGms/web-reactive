@@ -10,5 +10,7 @@ import reactor.core.publisher.Mono;
 public interface RelationshipRepository extends ReactiveCrudRepository<MediaUsers, Long> {
     Flux<MediaUsers> findByUsersIdentifier(long userId);
 
+    Flux<MediaUsers> findByMediaIdentifier(long mediaId);
+
     Mono<Integer> deleteByMediaIdentifierAndUsersIdentifier(long mediaIdentifier, long usersIdentifier);
 }
