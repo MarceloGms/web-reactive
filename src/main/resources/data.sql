@@ -68,5 +68,4 @@ INSERT INTO media_users (media_identifier, users_identifier) VALUES
 (16, 11),
 (17, 12),
 (18, 13),
-(19, 14),
-(20, 15);
+(19, 14);
