@@ -79,7 +79,6 @@ public class UserService {
                 });
     }
 
-    // TODO: isto quando tem uma relationship da throw de uma exception, perguntar ao stor se é suposto
     public Mono<Void> deleteUser(Long id) {
         return userRepository.findById(id)
                 .switchIfEmpty(Mono.defer(() -> {

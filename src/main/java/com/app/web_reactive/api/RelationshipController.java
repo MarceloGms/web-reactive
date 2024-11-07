@@ -32,18 +32,15 @@ public class RelationshipController {
         return relationshipService.disassociateMediaFromUser(mediaUsers.getMediaIdentifier(), mediaUsers.getUsersIdentifier());
     }
 
-    // TODO: oq exatamente é para fazer no ultimo req?
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public Flux<Long> getMediaByUser(@PathVariable long userId) {
         logger.info("Fetching media for user {}", userId);
         return relationshipService.getMediaByUser(userId);
     }
 
-    @GetMapping
-    public Flux<Long> getMediaUsers() {
-        logger.info("Fetching media users");
-        return relationshipService.getMediaUsers()
-                .flatMapMany(Flux::fromIterable)
-                .flatMap(Flux::fromIterable);
+    @GetMapping("/media/{mediaId}")
+    public Flux<Long> getUsersByMedia(@PathVariable long mediaId) {
+        logger.info("Fetching users for media {}", mediaId);
+        return relationshipService.getUsersByMedia(mediaId);
     }
 }
