@@ -1,2 +1,1 @@
-# Run server: `make sv`
-# Run client: `make cli`
+## Run server: `make sv`
