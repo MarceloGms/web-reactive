@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/media")
 public class MediaController {
@@ -22,7 +20,7 @@ public class MediaController {
     private MediaService mediaService;
 
     @PostMapping
-    public Mono<Media> createMedia(@Valid @RequestBody Media media) {
+    public Mono<Media> createMedia(@RequestBody Media media) {
         logger.info("Creating media: {}", media);
         return mediaService.createMedia(media);
     }
@@ -40,7 +38,7 @@ public class MediaController {
     }
 
     @PutMapping("/{id}")
-    public Mono<Media> updateMedia(@PathVariable Long id, @Valid @RequestBody Media media) {
+    public Mono<Media> updateMedia(@PathVariable Long id, @RequestBody Media media) {
         logger.info("Updating media with id: {}", id);
         return mediaService.updateMedia(id, media);
     }
