@@ -1,3 +1,5 @@
+## Client: https://github.com/MarceloGms/web-reactive-client
+
 # Reactive Media Management System  
 
 This repository contains the implementation for **Project #2** of the "Enterprise Application Integration" course at the University of Coimbra. The project uses **Reactive Streams** and **Spring WebFlux** to build a scalable, asynchronous system for managing media content and user interactions.  
